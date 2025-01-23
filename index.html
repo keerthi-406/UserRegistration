@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Submission Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4; 
+            background-image: url('institute.jpg'); 
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat;
+        }
+        form {
+            max-width: 400px;
+            margin: auto;
+            background-color: #a76328;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        input[type="text"], input[type="email"], input[type="tel"] {
+            width: calc(70% - 12px); 
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+    
+</head>
+<body>
+    <h1 style="text-align: center;color:brown;font:x-large;background-color:blue">User Submission Form</h1>
+    <form id="submitForm">
+        <label for="name"><h2>Name:</h2></label>
+        <input type="text" id="name" name="name" required>    
+        <label for="email"><h2>Email:</h2></label>
+        <input type="email" id="email" name="email" required>
+        <label for="phone"><h2>Mobile:</h2></label>
+        <input type="tel" id="phone" name="phone" required>
+        <label for="Qualification"><h2>Enter your HighestQualification(B.tech/Degree/Inter/10th)</h2></label>
+        <input type="text" id="Qualification" name="Qualification" required>
+        <h2>select the course you want to learn:</h2>
+        <div class="radio-group">
+            <label>
+                <input type="radio" name="course" value="Java Programming" required> Java Programming
+            </label>
+            <label>
+                <input type="radio" name="course" value="Python Programming"> Python Programming
+            </label>
+            <label>
+                <input type="radio" name="course" value="Web Development"> Web Development
+            </label>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById('submitForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); 
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const Qualification = document.getElementById('Qualification').value;
+            const course = document.querySelector('input[name="course"]:checked').value;
+
+            try {
+                const response = await fetch('http://localhost:3000/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, phone, Qualification, course }),
+                });
+
+                const result = await response.text();
+                if (response.ok) {
+                    alert('Data submitted successfully: ' + result);
+                    window.location.href = '/thankyou.html';
+                } else {
+                    alert('Error: ' + result);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while submitting the data.');
+            }
+        });
+
+    </script>
+</body>
+</html>
